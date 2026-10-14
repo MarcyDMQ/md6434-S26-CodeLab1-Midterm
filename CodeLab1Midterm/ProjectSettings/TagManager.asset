@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Bullet
   - wall
+  - friend
+  - goat1
   layers:
   - Default
   - TransparentFX

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8768012427034944982}
   - component: {fileID: 5878643004389306786}
   m_Layer: 0
-  m_Name: explode
+  m_Name: explodeB
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4841,7 +4841,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 96db1e28441408e4c965185897000762, type: 2}
+  - {fileID: 2100000, guid: eb001b0284b198446a04b2bb9153a5fa, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

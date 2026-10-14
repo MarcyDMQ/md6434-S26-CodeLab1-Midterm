@@ -45,4 +45,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BulletSpawn
   bulletPrefab: {fileID: 2380437090589404526, guid: eea3cbcfcfc6d7f459502b7a9970470c, type: 3}
-  spawnInterval: 2
+  minInterval: 2
+  maxInterval: 3

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    public float speed = 5f;
+    public float speed = 2f;
     private Vector3 moveDir;
 
     public void Init(Vector3 direction)
@@ -10,7 +10,7 @@ public class Bullet : MonoBehaviour
         direction.y = 0;
         moveDir = direction.normalized;
 
-        // 【新增逻辑】在生成瞬间，让物体面朝移动方向
+        // 在生成瞬间，让物体面朝移动方向
         if (moveDir != Vector3.zero)
         {
             transform.rotation = Quaternion.LookRotation(moveDir);

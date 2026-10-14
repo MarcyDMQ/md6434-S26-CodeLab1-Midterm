@@ -6,10 +6,14 @@ using UnityEngine.UIElements;
 public class ASCIILevelLoader : MonoBehaviour
 {
     //make the actual prefab in unity
-    public GameObject wall;
+    public GameObject wallBlue;
+    public GameObject wallYellow;
     public GameObject player;
     public GameObject goal;
     public GameObject obstacle;
+    public GameObject obstacleGoat;
+    public GameObject floorBlue;
+    public GameObject floorYellow;
     public string fileLocation;
     string fullPath;//the full path to the level file
     private int currentLevel = 0;
@@ -93,16 +97,28 @@ public class ASCIILevelLoader : MonoBehaviour
                 switch (currentChar)
                 {
                     case'W' :
-                        newObject=Instantiate<GameObject>(wall);
+                        newObject=Instantiate<GameObject>(wallBlue);
+                        break;
+                    case'w' :
+                        newObject=Instantiate<GameObject>(wallYellow);
                         break;
                     case'P' :
                         newObject=Instantiate<GameObject>(player);
                         break;
-                    case'G' :
-                        newObject=Instantiate<GameObject>(goal);
+                    case'F' :
+                        newObject=Instantiate<GameObject>(floorBlue);
+                        break;
+                    case'f' :
+                        newObject=Instantiate<GameObject>(floorYellow);
                         break;
                     case'O' :
                         newObject=Instantiate<GameObject>(obstacle);
+                        break;
+                    case'0' :
+                        newObject=Instantiate<GameObject>(obstacleGoat);
+                        break;
+                    case'G' :
+                        newObject=Instantiate<GameObject>(goal);
                         break;
                     default:
                         break;

@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
 
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI gameOverText;
-    public TextMeshProUGUI winText;
+    public TextMeshProUGUI levelText;
 
     public float survivalTime = 0f;
     public float targetTime = 10f;
@@ -48,7 +48,7 @@ public class GameManager : MonoBehaviour
         
             // hide game over text
             if (gameOverText != null) gameOverText.gameObject.SetActive(false);
-            if (winText != null) winText.gameObject.SetActive(false);
+            if (levelText != null) levelText.gameObject.SetActive(false);
         }
         else { 
             Destroy(gameObject); 
@@ -62,10 +62,17 @@ public class GameManager : MonoBehaviour
         survivalTime += Time.deltaTime;
         Score += Time.deltaTime;
 
+        // score text
         if (scoreText != null)
         {
-            // Score&HighScore
             scoreText.text = "Your Score: " + Mathf.FloorToInt(Score+0.5f) + "  HighScore: " + Mathf.FloorToInt(HighScore);
+        }
+
+        // current level text
+        if (levelText != null)
+        {
+            levelText.gameObject.SetActive(true); 
+            levelText.text = "Level: " + (currentLevel + 1); 
         }
 
         if (survivalTime >= targetTime)
