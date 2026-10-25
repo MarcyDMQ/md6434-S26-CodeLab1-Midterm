@@ -1,0 +1,5 @@
+{
+  "name": "SocialSim.PlayMode",
+  "references": ["SocialSim.Runtime", "Unity.AI.Navigation"],
+  "optionalUnityReferences": ["TestAssemblies"]
+}

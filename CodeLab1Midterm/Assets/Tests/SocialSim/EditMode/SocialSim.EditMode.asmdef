@@ -1,0 +1,6 @@
+{
+  "name": "SocialSim.EditMode",
+  "references": ["SocialSim.Runtime", "Unity.AI.Navigation"],
+  "includePlatforms": ["Editor"],
+  "optionalUnityReferences": ["TestAssemblies"]
+}

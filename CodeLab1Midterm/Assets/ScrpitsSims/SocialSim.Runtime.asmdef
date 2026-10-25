@@ -1,0 +1,4 @@
+{
+  "name": "SocialSim.Runtime",
+  "references": ["Unity.AI.Navigation", "UnityEngine.UI", "Unity.InputSystem"]
+}

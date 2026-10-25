@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
 
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI gameOverText;
+    public TextMeshProUGUI goodGameText;
     public TextMeshProUGUI levelText;
 
     public float survivalTime = 0f;
@@ -34,20 +35,30 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private float highScore;
     public float HighScore
     {
-        get { return LoadHighScore(); }
-        set { SaveHighScore(value); }
+        get
+    {
+        return highScore;
     }
 
+    set
+    {
+        highScore = value;
+    }
+    }
+    
     void Awake()
     {
         if (instance == null) { 
             instance = this; 
             DontDestroyOnLoad(gameObject); 
+            highScore = LoadHighScore();
         
             // hide game over text
             if (gameOverText != null) gameOverText.gameObject.SetActive(false);
+            if (goodGameText != null) goodGameText.gameObject.SetActive(false);
             if (levelText != null) levelText.gameObject.SetActive(false);
         }
         else { 
@@ -86,6 +97,8 @@ public class GameManager : MonoBehaviour
         if (gameOver) return; 
 
         gameOver = true;
+
+        SaveHighScore(HighScore);
     
         // display game over text
         if (gameOverText != null) 
@@ -96,7 +109,8 @@ public class GameManager : MonoBehaviour
 
     void GoToNextLevel()
     {
-        currentLevel++;
+        if(currentLevel<=7){
+            currentLevel++;
         if (ASCIILevelLoader.instance != null)
         {
             ASCIILevelLoader.instance.CurrentLevel = currentLevel;
@@ -104,6 +118,17 @@ public class GameManager : MonoBehaviour
         
         targetTime *= 1.0f; // adjust level difficulty
         survivalTime = 0f;
+        }
+        else
+        {   gameOver=true;
+            SaveHighScore(HighScore);
+            // display good game text
+        if (goodGameText != null) 
+        {
+            goodGameText.gameObject.SetActive(true);
+        }
+        }
+        
     }
     
     private void SaveHighScore(float value)
