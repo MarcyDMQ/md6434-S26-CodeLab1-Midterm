@@ -13,6 +13,8 @@ namespace SocialSim
         [Min(0)] public float studyGain = 6f;
         [Min(0)] public float studyFatigue = 4f;
         [Min(0)] public float restRecovery = 8f;
+        [Tooltip("Fatigue above this value begins blending toward the fatigue material; full blend at 100.")]
+        [Range(0, 99)] public float fatigueTintThreshold = 50f;
         [Range(0, 100)] public float stressAcademicThreshold = 50f;
         [Min(0)] public float stressGain = 2f;
         [Min(0)] public float playgroundStressRecovery = 8f;
@@ -38,6 +40,7 @@ namespace SocialSim
         public GameObject visualPrefab;
         public RuntimeAnimatorController studentAnimator;
         public Material stressMaterial;
+        public Material fatigueMaterial;
         public GameObject explodePrefab;
         public ActivityArea[] areas;
         public Transform[] spawnPoints;
@@ -135,8 +138,9 @@ namespace SocialSim
                 var student = root.AddComponent<StudentAgent>();
                 student.Initialize(i + 1, settings, areas, animator, this, spawnIndex);
                 students.Add(student);
-                if (stressMaterial) root.AddComponent<StudentStressVisual>().Initialize(student, visual.transform, stressMaterial, settings);
-                if (showDebugLabels) root.AddComponent<StudentDebugLabel>().Initialize(student);
+                if (stressMaterial || fatigueMaterial)
+                    root.AddComponent<StudentStressVisual>().Initialize(student, visual.transform, stressMaterial, settings, fatigueMaterial);
+                root.AddComponent<StudentDebugLabel>().Initialize(student, showDebugLabels);
             }
             GroupCoordinator = GetComponent<StudentGroupCoordinator>();
             if (!GroupCoordinator) GroupCoordinator = gameObject.AddComponent<StudentGroupCoordinator>();

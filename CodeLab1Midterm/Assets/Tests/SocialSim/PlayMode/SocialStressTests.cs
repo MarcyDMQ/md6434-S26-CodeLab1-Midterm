@@ -55,6 +55,10 @@ public class SocialStressTests
         var first = manager.Students[0];
         var second = manager.Students[1];
         first.BeginDrag(); second.BeginDrag();
+        typeof(StudentAgent).GetField("fatigue", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(first, 0f);
+        typeof(StudentAgent).GetField("fatigue", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(second, 0f);
+        yield return null;
+        yield return null;
         var firstRenderer = first.GetComponentsInChildren<SkinnedMeshRenderer>()[0];
         var secondRenderer = second.GetComponentsInChildren<SkinnedMeshRenderer>()[0];
         var firstMaterial = firstRenderer.sharedMaterials[0];
@@ -87,6 +91,54 @@ public class SocialStressTests
         Assert.That(firstMaterial == null, Is.True);
         Assert.That(secondMaterial != null, Is.True);
         Object.Destroy(testTarget);
+    }
+
+    [UnityTest]
+    public IEnumerator FatigueBlendsToBlueAndRestoresWithStressPriority()
+    {
+        yield return SceneManager.LoadSceneAsync("SocialSim");
+        yield return null;
+        var manager = Object.FindAnyObjectByType<SocialManager>();
+        manager.settings.stressGain = 0;
+        manager.settings.crowdStressPerNeighbor = 0;
+        manager.settings.explosionGracePeriod = 999;
+        Assert.That(manager.fatigueMaterial, Is.Not.Null);
+        var student = manager.Students[0];
+        student.BeginDrag();
+        var fatigueField = typeof(StudentAgent).GetField("fatigue", BindingFlags.Instance | BindingFlags.NonPublic);
+        SetStress(student, 0); fatigueField.SetValue(student, 0f);
+        yield return null;
+        yield return null;
+        var material = student.GetComponentsInChildren<SkinnedMeshRenderer>()[0].sharedMaterials[0];
+        var original = material.GetColor("_Color");
+        var blue = manager.fatigueMaterial.GetColor("_Color");
+        manager.settings.fatigueTintThreshold = 60f;
+        fatigueField.SetValue(student, 30f);
+        yield return null;
+        yield return null;
+        Assert.That(material.GetColor("_Color"), Is.EqualTo(original).Using(ColorComparer.Instance));
+        fatigueField.SetValue(student, 60f);
+        yield return null;
+        yield return null;
+        Assert.That(material.GetColor("_Color"), Is.EqualTo(original).Using(ColorComparer.Instance));
+        fatigueField.SetValue(student, 80f);
+        yield return null;
+        yield return null;
+        var half = QualitySettings.activeColorSpace == ColorSpace.Linear ? Color.Lerp(original.linear, blue.linear, 0.5f).gamma : Color.Lerp(original, blue, 0.5f);
+        Assert.That(material.GetColor("_Color"), Is.EqualTo(half).Using(ColorComparer.Instance));
+        fatigueField.SetValue(student, 100f);
+        yield return null;
+        yield return null;
+        Assert.That(material.GetColor("_Color"), Is.EqualTo(blue).Using(ColorComparer.Instance));
+        SetStress(student, manager.settings.stressExplosionThreshold);
+        yield return null;
+        yield return null;
+        Assert.That(material.GetColor("_Color"), Is.EqualTo(manager.stressMaterial.GetColor("_Color")).Using(ColorComparer.Instance));
+        SetStress(student, 0); fatigueField.SetValue(student, 0f);
+        yield return null;
+        yield return null;
+        Assert.That(material.GetColor("_Color"), Is.EqualTo(original).Using(ColorComparer.Instance));
+        Assert.That(manager.fatigueMaterial.GetColor("_Color"), Is.EqualTo(blue));
     }
 
     sealed class ColorComparer : System.Collections.Generic.IEqualityComparer<Color>

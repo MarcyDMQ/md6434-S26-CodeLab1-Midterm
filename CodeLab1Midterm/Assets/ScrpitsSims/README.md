@@ -17,6 +17,7 @@
 ## 邻居、变色与压力爆炸
 
 - Manager 的 **Stress Material** 默认引用现有 `red`，**Explode Prefab** 默认引用 `explodeR`。两者都可在 Inspector 替换；原资产保持不变。
+- **Fatigue Material** 默认引用 `blueskin`。**Settings → Fatigue Tint Threshold** 默认 50：疲劳不超过阈值时保持原色，超过后开始渐变，75 时渐变一半，100 时完全接近它；休息后随疲劳降低而恢复。先计算疲劳颜色，再叠加压力颜色；压力达到爆炸阈值时以压力材质为主。每个学生使用独立材质实例，原材质资产不修改。
 - **Neighbor Radius** 默认 3：统计三维距离内的其他存活且启用的学生，不受墙体遮挡，也不会因为多个 Collider 重复计数。拖动中的学生同样参与。
 - **Support Min/Max Neighbors** 默认 2 / 4：在此区间，低成绩压力增长乘 **Supported Stress Gain Multiplier**（0.5），Playground 减压速度乘 **Supported Recovery Multiplier**（1.5）。
 - 超过 4 个邻居时，失去上述帮助；每多一个邻居，每秒增加 **Crowd Stress Per Neighbor**（1）点压力。此压力不要求成绩低于阈值。在操场实际执行减压活动时免疫拥挤压力，2–4 名同伴的减压加成仍生效；低成绩压力照常计算，前往操场、集合等待或拖动时不享受这项豁免。

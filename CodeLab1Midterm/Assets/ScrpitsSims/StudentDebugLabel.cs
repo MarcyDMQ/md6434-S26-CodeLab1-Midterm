@@ -6,13 +6,15 @@ namespace SocialSim
     public class StudentDebugLabel : MonoBehaviour
     {
         StudentAgent student; Text label; Transform panel; float nextRefresh;
-        public void Initialize(StudentAgent agent)
+        bool showDetails;
+        public void Initialize(StudentAgent agent, bool showDebugDetails = true)
         {
             student = agent;
+            showDetails = showDebugDetails;
             var canvasObject = new GameObject("Debug Label", typeof(RectTransform), typeof(Canvas));
             panel = canvasObject.transform; panel.SetParent(transform, false);
-            panel.localPosition = Vector3.up * 1.4f; panel.localScale = Vector3.one * 0.008f;
-            ((RectTransform)panel).sizeDelta = new Vector2(400, 240);
+            panel.localPosition = Vector3.up * (showDetails ? 1.4f : 1.15f); panel.localScale = Vector3.one * 0.008f;
+            ((RectTransform)panel).sizeDelta = showDetails ? new Vector2(400, 240) : new Vector2(180, 40);
             canvasObject.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
             var textObject = new GameObject("Status", typeof(RectTransform), typeof(Text));
             textObject.transform.SetParent(panel, false);
@@ -33,6 +35,12 @@ namespace SocialSim
             if (camera) panel.rotation = camera.transform.rotation;
             if (Time.unscaledTime < nextRefresh) return;
             nextRefresh = Time.unscaledTime + 0.2f;
+            if (!showDetails)
+            {
+                label.color = Color.white;
+                label.text = $"{student.Academic:F0}";
+                return;
+            }
             var scores = student.Scores;
             string socialState = student.HasSocialSupport ? "Supported" :
                 student.IsCrowded ? "Crowded" : "Normal";

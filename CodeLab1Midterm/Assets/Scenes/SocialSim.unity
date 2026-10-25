@@ -590,7 +590,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 5.3
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -8636,9 +8636,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: SocialSim.Runtime::SocialSim.SocialManager
   agentCount: 15
   visualPrefab: {fileID: 51540150350613072, guid: 44f8c239a791f2a45a069ec6a0eaa63f, type: 3}
-  stressMaterial: {fileID: 2100000, guid: 345faa79169afe741adc714cf4a14bb1, type: 2}
-  explodePrefab: {fileID: 2229488240968204871, guid: ab65f6a748fc1cb49964509c56330baf, type: 3}
   studentAnimator: {fileID: 9100000, guid: ef1495f662dd49278c5bdd1c6759a3ae, type: 2}
+  stressMaterial: {fileID: 2100000, guid: 345faa79169afe741adc714cf4a14bb1, type: 2}
+  fatigueMaterial: {fileID: 2100000, guid: 38214ca6013c7054c9e80f8b11ccee80, type: 2}
+  explodePrefab: {fileID: 2229488240968204871, guid: ab65f6a748fc1cb49964509c56330baf, type: 3}
   areas:
   - {fileID: 2200000102}
   - {fileID: 2200000202}
@@ -8654,8 +8655,9 @@ MonoBehaviour:
   settings:
     academicDecay: 0.5
     studyGain: 6
-    studyFatigue: 4
-    restRecovery: 8
+    studyFatigue: 15
+    restRecovery: 20
+    fatigueTintThreshold: 30
     stressAcademicThreshold: 50
     stressGain: 2
     playgroundStressRecovery: 8
@@ -8663,13 +8665,13 @@ MonoBehaviour:
     supportMinNeighbors: 2
     supportMaxNeighbors: 4
     supportedStressGainMultiplier: 0.5
-    supportedRecoveryMultiplier: 1.5
+    supportedRecoveryMultiplier: 1.8
     crowdStressPerNeighbor: 1
-    stressExplosionThreshold: 90
+    stressExplosionThreshold: 100
     explosionGracePeriod: 15
     explosionLifetime: 5
     stayDuration: 2
-    moveSpeed: 2.5
+    moveSpeed: 3
     agentRadius: 0.2
     agentHeight: 1
     stoppingDistance: 0.35
@@ -8701,7 +8703,7 @@ MonoBehaviour:
     maxGroupSpread: 2.5
     dropJoinDistance: 1.5
     emergencyFatigue: 85
-    emergencyStress: 75
+    emergencyStress: 90
     emergencyRelease: 40
 --- !u!1 &2086688518
 GameObject:
@@ -9466,6 +9468,9 @@ MonoBehaviour:
   target: {fileID: 638695848}
   arrivalDistance: 2
   activitySurfaces: []
+  requireSurfaceContact: 0
+  surfaceHeightTolerance: 0.12
+  surfaceGoalInset: 0.15
 --- !u!1 &2200000200
 GameObject:
   m_ObjectHideFlags: 0
@@ -9514,6 +9519,9 @@ MonoBehaviour:
   target: {fileID: 702152992}
   arrivalDistance: 2
   activitySurfaces: []
+  requireSurfaceContact: 0
+  surfaceHeightTolerance: 0.12
+  surfaceGoalInset: 0.15
 --- !u!1 &2200000300
 GameObject:
   m_ObjectHideFlags: 0
@@ -9567,6 +9575,7 @@ MonoBehaviour:
   - {fileID: 2140372204}
   requireSurfaceContact: 1
   surfaceHeightTolerance: 0.12
+  surfaceGoalInset: 0.15
 --- !u!1 &2200000500
 GameObject:
   m_ObjectHideFlags: 0

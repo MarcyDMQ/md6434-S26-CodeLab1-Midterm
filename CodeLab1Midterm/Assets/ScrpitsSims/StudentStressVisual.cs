@@ -15,12 +15,14 @@ namespace SocialSim
         readonly List<RendererMaterials> bindings = new List<RendererMaterials>();
         StudentAgent student;
         Material targetMaterial;
+        Material fatigueMaterial;
         SimulationSettings settings;
 
-        public void Initialize(StudentAgent owner, Transform visualRoot, Material target, SimulationSettings configuration)
+        public void Initialize(StudentAgent owner, Transform visualRoot, Material target, SimulationSettings configuration, Material fatigueTarget = null)
         {
             student = owner;
             targetMaterial = target;
+            fatigueMaterial = fatigueTarget;
             settings = configuration;
             // Restrict this to the visual prefab, so world-space labels stay unchanged.
             foreach (var renderer in visualRoot.GetComponentsInChildren<Renderer>(true))
@@ -39,11 +41,21 @@ namespace SocialSim
 
         void Refresh()
         {
-            if (!student || !targetMaterial || settings == null) return;
+            if (!student || settings == null) return;
             float amount = Mathf.Clamp01(student.Stress / Mathf.Max(1f, settings.stressExplosionThreshold));
+            float threshold = Mathf.Clamp(settings.fatigueTintThreshold, 0f, 99f);
+            float fatigue = Mathf.InverseLerp(threshold, 100f, student.Fatigue);
             foreach (var binding in bindings)
                 for (int i = 0; i < binding.instances.Length; i++)
-                    if (binding.instances[i]) binding.instances[i].Lerp(binding.originals[i], targetMaterial, amount);
+                {
+                    var material = binding.instances[i];
+                    if (!material) continue;
+                    // Start from the original every frame so resting reverses the tint without accumulated drift.
+                    if (fatigueMaterial) material.Lerp(binding.originals[i], fatigueMaterial, fatigue);
+                    else material.CopyPropertiesFromMaterial(binding.originals[i]);
+                    // Stress overlays the fatigue tint; maximum stress remains clearly visible.
+                    if (targetMaterial && amount > 0) material.Lerp(material, targetMaterial, amount);
+                }
         }
 
         void OnDestroy()
